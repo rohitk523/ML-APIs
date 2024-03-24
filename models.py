@@ -5,6 +5,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
+from ultralytics import YOLO
 
 router = APIRouter()
 
@@ -117,4 +118,12 @@ def perform_naive_bayes(file: UploadFile = File(...)):
 
     return {"error": "Uploaded file is not a CSV file"}
 
+
+@router.post('/Object Detection')
+def object_detection(file: UploadFile = File(...)):
+   # Load pre-trained model
+    model_path = 'yolov8n.pt'
+    
+    model = YOLO(model= model_path)
+    result = model.predict(file, save = True) 
 
