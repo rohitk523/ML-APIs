@@ -2,10 +2,9 @@ from fastapi import APIRouter, UploadFile, File
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, accuracy_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
-from ultralytics import YOLO
 
 router = APIRouter()
 
@@ -48,7 +47,7 @@ def perform_linear_regression(file: UploadFile = File(...)):
 
 
 
-@router.post("/classification")
+@router.post("/logistic Regression")
 def perform_classification(file: UploadFile = File(...)):
     # Check if the uploaded file is a CSV file
     if file.filename.endswith(".csv"):
