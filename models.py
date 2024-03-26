@@ -5,6 +5,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, accuracy_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
+from ultralytics import YOLO
 
 router = APIRouter()
 
@@ -119,10 +120,27 @@ def perform_naive_bayes(file: UploadFile = File(...)):
 
 
 @router.post('/Object Detection')
-def object_detection(file: UploadFile = File(...)):
-   # Load pre-trained model
-    model_path = 'yolov8n.pt'
-    
+async def object_detection(file: UploadFile):
+
+    # save file to check if its jpg format and correct
+    file_path = f"/home/rohit/GithubRepo/ML-APIs/Images for OD/{file.filename}"
+    with open(file_path, "wb") as f:
+        f.write(file.file.read())
+
+    # returned file should we sent to predict
+    model_path = 'yolov8m.pt'
+
     model = YOLO(model= model_path)
-    result = model.predict(file, save = True) 
+    results = model.predict(f'Images for OD/{file.filename}', save = True, conf=0.5)
+    # Iterate over the results
+    for result in results:
+        boxes = result.boxes  # Boxes object for bbox outputs
+        class_indices = boxes.cls  # Class indices of the detections
+        class_names = [result.names[int(cls)] for cls in class_indices]  # Map indices to names
+        print(class_names)
+
+    return {'Class Name': class_names } 
+        
+    
+
 
