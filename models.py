@@ -123,7 +123,7 @@ def perform_naive_bayes(file: UploadFile = File(...)):
 async def object_detection(file: UploadFile):
 
     # save file to check if its jpg format and correct
-    file_path = f"/home/rohit/GithubRepo/ML-APIs/Images for OD/{file.filename}"
+    file_path = f"Images for OD/{file.filename}"
     with open(file_path, "wb") as f:
         f.write(file.file.read())
 
